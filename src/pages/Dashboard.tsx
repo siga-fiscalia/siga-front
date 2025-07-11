@@ -1,36 +1,36 @@
 import React from 'react'
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
-import { Badge } from '@/components/ui/badge'
-import { Package, TrendingUp, AlertTriangle, DollarSign } from 'lucide-react'
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle
+} from '@/components/ui/card'
 
 const stats = [
   {
-    title: 'Total Products',
-    value: '1,234',
-    description: '+20.1% from last month',
-    icon: Package,
-    trend: 'up'
+    title: 'Total de Bienes',
+    value: '1,247',
+    description: '+12% desde el mes pasado',
+    color: 'text-blue-600'
   },
   {
-    title: 'Low Stock Items',
+    title: 'Bienes Asignados',
+    value: '1,089',
+    description: '87% del total',
+    color: 'text-green-600'
+  },
+  {
+    title: 'Bienes Disponibles',
+    value: '158',
+    description: '13% del total',
+    color: 'text-orange-500'
+  },
+  {
+    title: 'Faltantes',
     value: '23',
-    description: 'Requires attention',
-    icon: AlertTriangle,
-    trend: 'warning'
-  },
-  {
-    title: 'Total Value',
-    value: '$45,231.89',
-    description: '+15.3% from last month',
-    icon: DollarSign,
-    trend: 'up'
-  },
-  {
-    title: 'Monthly Sales',
-    value: '$12,234',
-    description: '+8.2% from last month',
-    icon: TrendingUp,
-    trend: 'up'
+    description: 'Requiere atención',
+    color: 'text-red-600'
   }
 ]
 
@@ -39,22 +39,19 @@ export default function Dashboard() {
     <div className="space-y-6">
       <div>
         <h2 className="text-3xl font-bold tracking-tight">Dashboard</h2>
-        <p className="text-muted-foreground">
-          Overview of your inventory management system
-        </p>
       </div>
 
+      {/* Estadísticas */}
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
         {stats.map((stat) => (
           <Card key={stat.title}>
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">
-                {stat.title}
-              </CardTitle>
-              <stat.icon className="h-4 w-4 text-muted-foreground" />
+            <CardHeader className="pb-2">
+              <CardTitle className="text-sm">{stat.title}</CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">{stat.value}</div>
+              <div className={`text-2xl font-bold ${stat.color}`}>
+                {stat.value}
+              </div>
               <p className="text-xs text-muted-foreground">
                 {stat.description}
               </p>
@@ -63,55 +60,59 @@ export default function Dashboard() {
         ))}
       </div>
 
+      {/* Actividades y Centros de Costo */}
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-7">
+        {/* Últimas Actividades */}
         <Card className="col-span-4">
           <CardHeader>
-            <CardTitle>Recent Activity</CardTitle>
-            <CardDescription>
-              Latest inventory movements and updates
-            </CardDescription>
+            <CardTitle>Últimas Actividades</CardTitle>
           </CardHeader>
-          <CardContent>
-            <div className="space-y-4">
-              {[1, 2, 3, 4, 5].map((item) => (
-                <div key={item} className="flex items-center space-x-4">
-                  <div className="w-2 h-2 bg-blue-500 rounded-full" />
-                  <div className="flex-1 space-y-1">
-                    <p className="text-sm font-medium leading-none">
-                      Product #{item} stock updated
-                    </p>
-                    <p className="text-sm text-muted-foreground">
-                      Quantity changed from 50 to 45 units
-                    </p>
-                  </div>
-                  <Badge variant="outline">2 hours ago</Badge>
-                </div>
-              ))}
+          <CardContent className="space-y-4">
+            <div className="flex items-center space-x-2">
+              <span className="w-2 h-2 bg-blue-600 rounded-full" />
+              <div>
+                <p>Importación de archivo SIGA</p>
+                <p className="text-sm text-muted-foreground">Hace 2 horas</p>
+              </div>
+            </div>
+            <div className="flex items-center space-x-2">
+              <span className="w-2 h-2 bg-green-600 rounded-full" />
+              <div>
+                <p>Asignación de laptop a Juan Pérez</p>
+                <p className="text-sm text-muted-foreground">Hace 4 horas</p>
+              </div>
+            </div>
+            <div className="flex items-center space-x-2">
+              <span className="w-2 h-2 bg-orange-600 rounded-full" />
+              <div>
+                <p>Reporte de inventario generado</p>
+                <p className="text-sm text-muted-foreground">Ayer</p>
+              </div>
             </div>
           </CardContent>
         </Card>
 
+        {/* Centros de Costo */}
         <Card className="col-span-3">
           <CardHeader>
-            <CardTitle>Quick Actions</CardTitle>
-            <CardDescription>
-              Common tasks and shortcuts
-            </CardDescription>
+            <CardTitle>Centros de Costo</CardTitle>
           </CardHeader>
-          <CardContent>
-            <div className="space-y-2">
-              <button className="w-full text-left p-3 rounded-lg border hover:bg-accent transition-colors">
-                <div className="font-medium">Add New Product</div>
-                <div className="text-sm text-muted-foreground">Create a new inventory item</div>
-              </button>
-              <button className="w-full text-left p-3 rounded-lg border hover:bg-accent transition-colors">
-                <div className="font-medium">Update Stock</div>
-                <div className="text-sm text-muted-foreground">Modify existing quantities</div>
-              </button>
-              <button className="w-full text-left p-3 rounded-lg border hover:bg-accent transition-colors">
-                <div className="font-medium">Generate Report</div>
-                <div className="text-sm text-muted-foreground">Create inventory reports</div>
-              </button>
+          <CardContent className="space-y-2">
+            <div className="flex justify-between">
+              <span>Sede Principal</span>
+              <span className="text-sm text-muted-foreground">456 bienes</span>
+            </div>
+            <div className="flex justify-between">
+              <span>Sede Norte</span>
+              <span className="text-sm text-muted-foreground">321 bienes</span>
+            </div>
+            <div className="flex justify-between">
+              <span>Sede Sur</span>
+              <span className="text-sm text-muted-foreground">289 bienes</span>
+            </div>
+            <div className="flex justify-between">
+              <span>Sede Este</span>
+              <span className="text-sm text-muted-foreground">181 bienes</span>
             </div>
           </CardContent>
         </Card>

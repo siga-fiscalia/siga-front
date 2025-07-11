@@ -14,10 +14,10 @@ export default function Header() {
   const { setTheme } = useTheme()
 
   return (
-    <header className="flex h-16 items-center justify-between border-b bg-background px-6">
+    <header className="flex items-center justify-between h-16 px-6 border-b bg-background">
       <div className="flex items-center gap-4">
         <SidebarTrigger />
-        <h1 className="text-xl font-semibold">Inventory Management</h1>
+        <h1 className="text-xl font-semibold">Gestión de inventario</h1>
       </div>
       
       <div className="flex items-center gap-4">

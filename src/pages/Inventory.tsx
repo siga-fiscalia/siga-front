@@ -1,122 +1,165 @@
-import React from 'react'
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
-import { Button } from '@/components/ui/button'
+import React, { useState } from 'react'
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
-import { Badge } from '@/components/ui/badge'
-import { Search, Plus, Filter } from 'lucide-react'
-
-const inventoryItems = [
-  {
-    id: 1,
-    name: 'Laptop Dell XPS 13',
-    sku: 'DELL-XPS-001',
-    category: 'Electronics',
-    quantity: 25,
-    minStock: 10,
-    price: 999.99,
-    status: 'In Stock'
-  },
-  {
-    id: 2,
-    name: 'Office Chair Ergonomic',
-    sku: 'CHAIR-ERG-002',
-    category: 'Furniture',
-    quantity: 8,
-    minStock: 15,
-    price: 299.99,
-    status: 'Low Stock'
-  },
-  {
-    id: 3,
-    name: 'Wireless Mouse',
-    sku: 'MOUSE-WL-003',
-    category: 'Electronics',
-    quantity: 0,
-    minStock: 20,
-    price: 49.99,
-    status: 'Out of Stock'
-  },
-  {
-    id: 4,
-    name: 'Standing Desk',
-    sku: 'DESK-ST-004',
-    category: 'Furniture',
-    quantity: 12,
-    minStock: 5,
-    price: 599.99,
-    status: 'In Stock'
-  }
-]
-
-const getStatusBadge = (status: string) => {
-  switch (status) {
-    case 'In Stock':
-      return <Badge className="bg-green-100 text-green-800">In Stock</Badge>
-    case 'Low Stock':
-      return <Badge className="bg-yellow-100 text-yellow-800">Low Stock</Badge>
-    case 'Out of Stock':
-      return <Badge className="bg-red-100 text-red-800">Out of Stock</Badge>
-    default:
-      return <Badge variant="outline">{status}</Badge>
-  }
-}
+import { Button } from '@/components/ui/button'
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 
 export default function Inventory() {
+  const [filter, setFilter] = useState('')
+  const [search, setSearch] = useState('')
+
+  const items = [
+    {
+      id: 1,
+      codigo: '112230000001',
+      barra: 'P14254',
+      descripcion: 'DESHUMEDECEDOR PARA AMBIENTE TIPO COMERCIAL',
+      tipoVerif: 'F'
+    },
+    {
+      id: 2,
+      codigo: '112230000002',
+      barra: 'P14255',
+      descripcion: 'EQUIPO DE AIRE ACONDICIONADO DE PRECISION 24000 BTU - UNIDAD 1',
+      tipoVerif: 'F'
+    },
+    {
+      id: 3,
+      codigo: '112230000003',
+      barra: 'P14256',
+      descripcion: 'EQUIPO DE AIRE ACONDICIONADO DE PRECISION 24000 BTU - UNIDAD 2',
+      tipoVerif: 'F'
+    },
+    {
+      id: 4,
+      codigo: '112230000004',
+      barra: 'P14257',
+      descripcion: 'EQUIPO DE AIRE ACONDICIONADO DE PRECISION 24000 BTU - UNIDAD 3',
+      tipoVerif: 'F'
+    },
+    {
+      id: 5,
+      codigo: '112230000005',
+      barra: 'P14258',
+      descripcion: 'EQUIPO DE AIRE ACONDICIONADO DE PRECISION 24000 BTU - UNIDAD 4',
+      tipoVerif: 'F'
+    },
+  ]
+
   return (
     <div className="space-y-6">
-      <div className="flex justify-between items-center">
-        <div>
-          <h2 className="text-3xl font-bold tracking-tight">Inventory</h2>
-          <p className="text-muted-foreground">
-            Manage your inventory items and stock levels
-          </p>
-        </div>
-        <Button>
-          <Plus className="mr-2 h-4 w-4" />
-          Add Item
-        </Button>
+      {/* Cabecera de módulo */}
+      <div className="px-4 py-2 text-sm font-semibold text-white bg-blue-700 rounded-md">
+        Módulo de Patrimonio - Ejecutora: MINISTERIO PÚBLICO - GERENCIA ADMINISTRATIVA DE LA LIBERTAD
       </div>
 
       <Card>
         <CardHeader>
-          <CardTitle>Inventory Items</CardTitle>
-          <CardDescription>
-            A list of all inventory items with current stock levels
-          </CardDescription>
+          <CardTitle>Listado del Inventario Físico</CardTitle>
         </CardHeader>
-        <CardContent>
-          <div className="flex items-center space-x-2 mb-4">
-            <div className="relative flex-1">
-              <Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
-              <Input placeholder="Search items..." className="pl-8" />
+
+        <CardContent className="space-y-4">
+          {/* Filtros superiores */}
+          <div className="grid grid-cols-1 gap-4 md:grid-cols-3 lg:grid-cols-4">
+            <div>
+              <label className="text-sm font-medium">Año Inventario</label>
+              <Select defaultValue="2024">
+                <SelectTrigger>
+                  <SelectValue placeholder="Seleccione año" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="2024">2024</SelectItem>
+                  <SelectItem value="2023">2023</SelectItem>
+                </SelectContent>
+              </Select>
             </div>
-            <Button variant="outline">
-              <Filter className="mr-2 h-4 w-4" />
-              Filter
-            </Button>
+
+            <div>
+              <label className="text-sm font-medium">Número Inventario</label>
+              <Select defaultValue="1">
+                <SelectTrigger>
+                  <SelectValue placeholder="Seleccione" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="1">INVENTARIO DE BIENES MUEBLES PATRIMONIO</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+
+            <div>
+              <label className="text-sm font-medium">Fecha Registro</label>
+              <Input type="date" value="2025-06-23" readOnly />
+            </div>
+
+            <div>
+              <label className="text-sm font-medium">Tipo Registro</label>
+              <Select defaultValue="Institucional">
+                <SelectTrigger>
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="Institucional">Institucional</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
           </div>
 
-          <div className="rounded-md border">
-            <div className="grid grid-cols-7 gap-4 p-4 font-medium border-b bg-muted/50">
-              <div>Name</div>
-              <div>SKU</div>
-              <div>Category</div>
-              <div>Quantity</div>
-              <div>Min Stock</div>
-              <div>Price</div>
-              <div>Status</div>
-            </div>
-            {inventoryItems.map((item) => (
-              <div key={item.id} className="grid grid-cols-7 gap-4 p-4 border-b last:border-b-0 hover:bg-muted/50">
-                <div className="font-medium">{item.name}</div>
-                <div className="text-muted-foreground">{item.sku}</div>
-                <div>{item.category}</div>
-                <div>{item.quantity}</div>
-                <div>{item.minStock}</div>
-                <div>${item.price}</div>
-                <div>{getStatusBadge(item.status)}</div>
-              </div>
-            ))}
+          <div className="flex justify-end gap-2">
+            <Button variant="outline">Seleccionar Inventario</Button>
+            <Button className="text-white bg-black">Registrar Inventario</Button>
+          </div>
+
+          {/* Filtro búsqueda */}
+          <div className="flex items-center gap-2">
+            <label className="text-sm font-medium">Filtrar por:</label>
+            <Select value={filter} onValueChange={setFilter}>
+              <SelectTrigger className="w-40">
+                <SelectValue placeholder="Descripción" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="codigo">Código Patrimonial</SelectItem>
+                <SelectItem value="descripcion">Descripción</SelectItem>
+              </SelectContent>
+            </Select>
+
+            <Input
+              placeholder="Ingrese valor a buscar (ej: 01)"
+              className="w-80"
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+            />
+          </div>
+
+          {/* Tabla de resultados */}
+          <div className="overflow-auto border rounded-md">
+            <table className="w-full text-sm">
+              <thead className="text-left text-white bg-blue-600">
+                <tr>
+                  <th className="px-4 py-2">Item</th>
+                  <th className="px-4 py-2">Código Patrimonial</th>
+                  <th className="px-4 py-2">Código Barra/Inv Anterior</th>
+                  <th className="px-4 py-2">Descripción</th>
+                  <th className="px-4 py-2">Tipo Verif</th>
+                  <th className="px-4 py-2">Acciones</th>
+                </tr>
+              </thead>
+              <tbody>
+                {items.map((item) => (
+                  <tr key={item.id} className="border-t hover:bg-gray-50">
+                    <td className="px-4 py-2">{item.id}</td>
+                    <td className="px-4 py-2">{item.codigo}</td>
+                    <td className="px-4 py-2">{item.barra}</td>
+                    <td className="px-4 py-2">{item.descripcion}</td>
+                    <td className="px-4 py-2">{item.tipoVerif}</td>
+                    <td className="px-4 py-2">
+                      <Button size="sm" variant="outline">
+                        Ver Activo Fijo
+                      </Button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
           </div>
         </CardContent>
       </Card>
