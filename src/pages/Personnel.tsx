@@ -9,6 +9,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import EditPersonnelModal from "@/components/EditPersonnelModal";
+import DeletePersonnelModal from "@/components/DeletePersonnelModal";
 import {
   Search,
   Filter,
@@ -53,6 +55,14 @@ function StatusBadge({ status }: { status: Personnel["status"] }) {
 export default function Personnel() {
   const [search, setSearch] = useState<string>("");
   const [statusFilter, setStatusFilter] = useState<string>("all");
+  const [editingPersonnel, setEditingPersonnel] = useState<Personnel | null>(
+    null
+  );
+  const [deletingPersonnel, setDeletingPersonnel] = useState<Personnel | null>(
+    null
+  );
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
 
   const [personnelList, setPersonnelList] = useState<Personnel[]>([
     {
@@ -61,9 +71,9 @@ export default function Personnel() {
       dni: "12345678",
       profession: "ABOGADO",
       status: "ACTIVO",
-      email: "jperez@mp.gob.pe",
+      email: "juan.perez@mp.gob.pe",
       phone: "987654321",
-      department: "FISCALIA PENAL",
+      department: "LA LIBERTAD",
     },
     {
       code: "002",
@@ -113,6 +123,41 @@ export default function Personnel() {
   const inactiveCount = personnelList.filter(
     (p) => p.status === "INACTIVO"
   ).length;
+
+  const handleEdit = (person: Personnel) => {
+    setEditingPersonnel(person);
+    setIsEditModalOpen(true);
+  };
+
+  const handleDelete = (person: Personnel) => {
+    setDeletingPersonnel(person);
+    setIsDeleteModalOpen(true);
+  };
+
+  const handleSave = (updatedPersonnel: Personnel) => {
+    setPersonnelList((prev) =>
+      prev.map((person) =>
+        person.code === updatedPersonnel.code ? updatedPersonnel : person
+      )
+    );
+  };
+
+  const handleConfirmDelete = (personnelCode: string) => {
+    setPersonnelList((prev) =>
+      prev.filter((person) => person.code !== personnelCode)
+    );
+    console.log(`Personal ${personnelCode} eliminado exitosamente`);
+  };
+
+  const handleCloseEditModal = () => {
+    setIsEditModalOpen(false);
+    setEditingPersonnel(null);
+  };
+
+  const handleCloseDeleteModal = () => {
+    setIsDeleteModalOpen(false);
+    setDeletingPersonnel(null);
+  };
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-50">
@@ -383,6 +428,7 @@ export default function Personnel() {
                           <Button
                             size="sm"
                             variant="outline"
+                            onClick={() => handleEdit(person)}
                             className="text-blue-700 border-blue-200 hover:bg-blue-50"
                           >
                             <Edit className="w-3 h-3 mr-1" />
@@ -391,6 +437,7 @@ export default function Personnel() {
                           <Button
                             size="sm"
                             variant="outline"
+                            onClick={() => handleDelete(person)}
                             className="text-red-700 border-red-200 hover:bg-red-50"
                           >
                             <Trash2 className="w-3 h-3 mr-1" />
@@ -425,6 +472,23 @@ export default function Personnel() {
           </div>
         </Card>
       </div>
+
+      {/* Modales */}
+      {editingPersonnel && (
+        <EditPersonnelModal
+          personnel={editingPersonnel}
+          isOpen={isEditModalOpen}
+          onClose={handleCloseEditModal}
+          onSave={handleSave}
+        />
+      )}
+
+      <DeletePersonnelModal
+        personnel={deletingPersonnel}
+        isOpen={isDeleteModalOpen}
+        onClose={handleCloseDeleteModal}
+        onConfirm={handleConfirmDelete}
+      />
     </div>
   );
 }
