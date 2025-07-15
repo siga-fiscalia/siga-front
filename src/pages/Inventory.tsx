@@ -10,6 +10,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import ViewAssetModal from "@/components/ViewAssetModal";
+import SelectInventoryModal from "@/components/SelectInventoryModal";
 import {
   Search,
   Filter,
@@ -35,6 +36,8 @@ export default function Inventory() {
   const [filter, setFilter] = useState("");
   const [search, setSearch] = useState("");
   const [isViewModalOpen, setIsViewModalOpen] = useState(false);
+  const [isSelectInventoryModalOpen, setIsSelectInventoryModalOpen] =
+    useState(false);
   const [selectedAsset, setSelectedAsset] = useState<InventoryItem | null>(
     null
   );
@@ -86,9 +89,21 @@ export default function Inventory() {
     setIsViewModalOpen(true);
   };
 
-  const handleCloseModal = () => {
+  const handleCloseViewModal = () => {
     setIsViewModalOpen(false);
     setSelectedAsset(null);
+  };
+
+  const handleOpenSelectInventoryModal = () => {
+    setIsSelectInventoryModalOpen(true);
+  };
+
+  const handleCloseSelectInventoryModal = () => {
+    setIsSelectInventoryModalOpen(false);
+  };
+
+  const handleSaveSelectedItems = (selectedItems: any[]) => {
+    console.log("Items seleccionados:", selectedItems);
   };
 
   return (
@@ -195,6 +210,7 @@ export default function Inventory() {
                 <Button
                   variant="outline"
                   className="text-white border-white hover:bg-white hover:text-blue-600"
+                  onClick={handleOpenSelectInventoryModal}
                 >
                   Seleccionar Inventario
                 </Button>
@@ -418,8 +434,14 @@ export default function Inventory() {
         </Card>
       </div>
 
-      {/* Modal de Ver Activo Fijo */}
-      <ViewAssetModal isOpen={isViewModalOpen} onClose={handleCloseModal} />
+      {/* Modales */}
+      <ViewAssetModal isOpen={isViewModalOpen} onClose={handleCloseViewModal} />
+
+      <SelectInventoryModal
+        isOpen={isSelectInventoryModalOpen}
+        onClose={handleCloseSelectInventoryModal}
+        onSave={handleSaveSelectedItems}
+      />
     </div>
   );
 }
