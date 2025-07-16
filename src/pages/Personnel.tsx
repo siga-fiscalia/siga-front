@@ -11,6 +11,7 @@ import {
 } from "@/components/ui/select";
 import EditPersonnelModal from "@/components/EditPersonnelModal";
 import DeletePersonnelModal from "@/components/DeletePersonnelModal";
+import NewPersonnelModal from "@/components/NewPersonnelModal"; 
 import {
   Search,
   Filter,
@@ -23,7 +24,6 @@ import {
   Building2,
   Phone,
   Mail,
-  IdCard,
 } from "lucide-react";
 
 interface Personnel {
@@ -63,6 +63,7 @@ export default function Personnel() {
   );
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const [isNewModalOpen, setIsNewModalOpen] = useState(false); // Estado para el modal nuevo
 
   const [personnelList, setPersonnelList] = useState<Personnel[]>([
     {
@@ -159,6 +160,19 @@ export default function Personnel() {
     setDeletingPersonnel(null);
   };
 
+  const handleOpenNewModal = () => {
+    setIsNewModalOpen(true);
+  };
+
+  const handleCloseNewModal = () => {
+    setIsNewModalOpen(false);
+  };
+
+  const handleSaveNewPersonnel = (newPersonnelData: Personnel) => {
+    setPersonnelList((prev) => [...prev, newPersonnelData]);
+    console.log("Nuevo personal agregado:", newPersonnelData);
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-50">
       {/* Header Principal */}
@@ -180,6 +194,7 @@ export default function Personnel() {
               <Button
                 className="text-blue-600 bg-white border-0 shadow-lg hover:bg-blue-50"
                 size="lg"
+                onClick={handleOpenNewModal} // Función actualizada
               >
                 <Plus className="w-5 h-5 mr-2" />
                 Nuevo Personal
@@ -381,7 +396,7 @@ export default function Personnel() {
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
                         <div className="flex items-center space-x-2">
-                          <IdCard className="w-4 h-4 text-gray-400" />
+                          <Users className="w-4 h-4 text-gray-400" />
                           <span className="font-mono text-sm text-gray-700">
                             {person.dni}
                           </span>
@@ -488,6 +503,13 @@ export default function Personnel() {
         isOpen={isDeleteModalOpen}
         onClose={handleCloseDeleteModal}
         onConfirm={handleConfirmDelete}
+      />
+
+      {/* Modal de Nuevo Personal */}
+      <NewPersonnelModal
+        isOpen={isNewModalOpen}
+        onClose={handleCloseNewModal}
+        onSave={handleSaveNewPersonnel}
       />
     </div>
   );
