@@ -249,7 +249,7 @@ export default function EditPersonnelModal({
                   className="border-blue-200 focus:border-blue-500 focus:ring-blue-500"
                 />
               </div>
-              
+
               <div className="space-y-2">
                 <Label
                   htmlFor="numero-documento"
@@ -268,7 +268,7 @@ export default function EditPersonnelModal({
                   maxLength={8}
                 />
               </div>
-              
+
               <div className="space-y-2">
                 <Label
                   htmlFor="estado-civil"
@@ -474,19 +474,13 @@ export default function EditPersonnelModal({
                 <Label htmlFor="escala" className="font-medium text-blue-800">
                   Escala
                 </Label>
-                <Select
+                <Input
+                  id="escala"
                   value={formData.escala}
-                  onValueChange={(value) => handleInputChange("escala", value)}
-                >
-                  <SelectTrigger className="border-blue-200 focus:border-blue-500 focus:ring-blue-500">
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="SP-ES">SP-ES</SelectItem>
-                    <SelectItem value="SP-AP">SP-AP</SelectItem>
-                    <SelectItem value="SP-EJ">SP-EJ</SelectItem>
-                  </SelectContent>
-                </Select>
+                  onChange={(e) => handleInputChange("escala", e.target.value)}
+                  className="border-blue-200 focus:border-blue-500 focus:ring-blue-500"
+                  placeholder="SP-ES"
+                />
               </div>
               <div className="space-y-2">
                 <Label
@@ -555,21 +549,15 @@ export default function EditPersonnelModal({
                 >
                   Grado Instruc.
                 </Label>
-                <Select
+                <Input
+                  id="grado-instruccion"
                   value={formData.gradoInstruccion}
-                  onValueChange={(value) =>
-                    handleInputChange("gradoInstruccion", value)
+                  onChange={(e) =>
+                    handleInputChange("gradoInstruccion", e.target.value)
                   }
-                >
-                  <SelectTrigger className="border-blue-200 focus:border-blue-500 focus:ring-blue-500">
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="UNIVERSITARIO">Universitario</SelectItem>
-                    <SelectItem value="TECNICO">Técnico</SelectItem>
-                    <SelectItem value="SECUNDARIA">Secundaria</SelectItem>
-                  </SelectContent>
-                </Select>
+                  className="border-blue-200 focus:border-blue-500 focus:ring-blue-500"
+                  placeholder="UNIVERSITARIO"
+                />
               </div>
               <div className="space-y-2">
                 <Label
@@ -838,20 +826,15 @@ export default function EditPersonnelModal({
                 >
                   Cía Depósito
                 </Label>
-                <Select
+                <Input
+                  id="cia-deposito"
                   value={formData.ciaDeposito}
-                  onValueChange={(value) =>
-                    handleInputChange("ciaDeposito", value)
+                  onChange={(e) =>
+                    handleInputChange("ciaDeposito", e.target.value)
                   }
-                >
-                  <SelectTrigger className="border-blue-200 focus:border-blue-500 focus:ring-blue-500">
-                    <SelectValue placeholder="Seleccionar" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="DEPOSITO01">Depósito 01</SelectItem>
-                    <SelectItem value="DEPOSITO02">Depósito 02</SelectItem>
-                  </SelectContent>
-                </Select>
+                  className="border-blue-200 focus:border-blue-500 focus:ring-blue-500"
+                  placeholder="DEPOSITO01"
+                />
               </div>
             </div>
 
