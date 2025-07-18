@@ -11,6 +11,7 @@ import {
 } from "@/components/ui/select";
 import ViewAssetModal from "@/components/ViewAssetModal";
 import SelectInventoryModal from "@/components/SelectInventoryModal";
+import NewInventoryModal from "@/components/NewInventoryModal";
 import {
   Search,
   Filter,
@@ -38,6 +39,7 @@ export default function Inventory() {
   const [isViewModalOpen, setIsViewModalOpen] = useState(false);
   const [isSelectInventoryModalOpen, setIsSelectInventoryModalOpen] =
     useState(false);
+  const [isNewInventoryModalOpen, setIsNewInventoryModalOpen] = useState(false);
   const [selectedAsset, setSelectedAsset] = useState<InventoryItem | null>(
     null
   );
@@ -104,6 +106,18 @@ export default function Inventory() {
 
   const handleSaveSelectedItems = (selectedItems: any[]) => {
     console.log("Items seleccionados:", selectedItems);
+  };
+
+  const handleOpenNewInventoryModal = () => {
+    setIsNewInventoryModalOpen(true);
+  };
+
+  const handleCloseNewInventoryModal = () => {
+    setIsNewInventoryModalOpen(false);
+  };
+
+  const handleSaveNewInventory = (inventoryData: any) => {
+    console.log("Nuevo inventario creado:", inventoryData);
   };
 
   return (
@@ -203,13 +217,15 @@ export default function Inventory() {
                 </div>
               </div>
               <div className="flex space-x-3">
-                <Button className="text-blue-600 bg-white border-0 shadow-lg hover:bg-blue-50">
+                <Button
+                  className="text-blue-600 bg-white border-0 shadow-lg hover:bg-blue-50"
+                  onClick={handleOpenNewInventoryModal}
+                >
                   <Plus className="w-4 h-4 mr-2" />
                   Registrar Inventario
                 </Button>
                 <Button
-                  variant="outline"
-                  className="text-white border-white hover:bg-white hover:text-blue-600"
+                  className="text-white bg-blue-500 border-0 shadow-lg hover:bg-blue-600"
                   onClick={handleOpenSelectInventoryModal}
                 >
                   Seleccionar Inventario
@@ -273,6 +289,21 @@ export default function Inventory() {
                   </SelectTrigger>
                   <SelectContent>
                     <SelectItem value="Institucional">Institucional</SelectItem>
+                    <SelectItem value="No Institucional - Bienes cedidos en Uso">
+                      No Institucional - Bienes cedidos en Uso
+                    </SelectItem>
+                    <SelectItem value="No Institucional - Bienes en Comodato">
+                      No Institucional - Bienes en Comodato
+                    </SelectItem>
+                    <SelectItem value="No Institucional - Afectación en Uso">
+                      No Institucional - Afectación en Uso
+                    </SelectItem>
+                    <SelectItem value="No Institucional - Bienes Adjudicados">
+                      No Institucional - Bienes Adjudicados
+                    </SelectItem>
+                    <SelectItem value="No Institucional - Bienes Incautados">
+                      No Institucional - Bienes Incautados
+                    </SelectItem>
                   </SelectContent>
                 </Select>
               </div>
@@ -299,8 +330,14 @@ export default function Inventory() {
                     <SelectValue placeholder="Descripción" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="codigo">Código Patrimonial</SelectItem>
                     <SelectItem value="descripcion">Descripción</SelectItem>
+                    <SelectItem value="sede">Sede</SelectItem>
+                    <SelectItem value="codigoPatrimonial">
+                      CódigoPatrimonial
+                    </SelectItem>
+                    <SelectItem value="centro">Centro de Costo</SelectItem>
+                    <SelectItem value="ubicacion">Ubicación</SelectItem>
+                    <SelectItem value="tipoVerif">TipoVerif</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
@@ -441,6 +478,12 @@ export default function Inventory() {
         isOpen={isSelectInventoryModalOpen}
         onClose={handleCloseSelectInventoryModal}
         onSave={handleSaveSelectedItems}
+      />
+
+      <NewInventoryModal
+        isOpen={isNewInventoryModalOpen}
+        onClose={handleCloseNewInventoryModal}
+        onSave={handleSaveNewInventory}
       />
     </div>
   );

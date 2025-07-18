@@ -19,6 +19,9 @@ import {
   Building2,
   User,
   DollarSign,
+  MapPin,
+  Settings,
+  Info,
 } from "lucide-react";
 
 interface AssetData {
@@ -33,12 +36,12 @@ interface AssetData {
   responsable: string;
   usuarioFinal: string;
   tipoIngreso: string;
+  fechaIngreso: string;
   verificacionFisica: boolean;
   etiquetado: boolean;
   tipoPatrimonio: string;
   mueblesEnseres: string;
   numeroSerie: string;
-  fechaIngreso: string;
   estado: string;
   estadoConservacion: string;
   estadoUso: string;
@@ -48,6 +51,23 @@ interface AssetData {
   caracteristicas: string;
   observaciones: string;
   ctaContable: string;
+  paisProcedencia: string;
+  almacen: string;
+  nroDoc: string;
+  fecha: string;
+  proveedor: string;
+  valorCompra: string;
+  garantia: string;
+  fechaGarantia: string;
+  nroContrato: string;
+  tipoDoc: string;
+  altaDoc: string;
+  ingresoDelBienPor: string;
+  salida: boolean;
+  activoDepreciable: boolean;
+  inst: boolean;
+  nroSerieEstado: string;
+  estadoActual: string;
 }
 
 interface ViewAssetModalProps {
@@ -64,31 +84,48 @@ export default function ViewAssetModal({
   // Datos de ejemplo basados en la imagen
   const defaultData: AssetData = {
     item: "112282820002",
-    correlativo: "00003547",
+    correlativo: "00003247",
     codigoPatrimonial: "112282820002",
     codigoBarra: "P148265",
     descripcion: "DESHUMIDIFICADOR PARA AMBIENTE TIPO COMERCIAL",
     sede: "ARCHIVO CENTRAL",
-    centroCosto: "01-06-ARCHIVO CENTRAL",
-    ubicacionFisica: "2004-ARCHIVO CENTRAL",
-    responsable: "GUERRERO ESCOBEDO, JHONY GERHARD",
-    usuarioFinal: "GUERRERO ESCOBEDO, JHONY GERHARD",
+    centroCosto: "01-06-ARCHIVO",
+    ubicacionFisica: "2004-ARCHIVO - PISO 2",
+    responsable: "GUERRERO ESCOBEDO JHONY GERHARD",
+    usuarioFinal: "GUERRERO ESCOBEDO JHONY GERHARD",
     tipoIngreso: "INVENTARIO INICIAL",
-    verificacionFisica: false,
+    fechaIngreso: "01/01/2019",
+    verificacionFisica: true,
     etiquetado: false,
     tipoPatrimonio: "Bienes Muebles",
     mueblesEnseres: "Muebles y Enseres",
     numeroSerie: "59E0122QJ16",
-    fechaIngreso: "01/01/2019",
     estado: "Activo Fijo",
-    estadoConservacion: "BUENO",
-    estadoUso: "S",
+    estadoConservacion: "Bueno",
+    estadoUso: "Si",
     marca: "LG",
-    modelo: "SM",
+    modelo: "S/M",
     medidas: "",
-    caracteristicas: "DESHUMIDIFICADOR PARA AMBIENTE TIPO COMERCIAL M...",
+    caracteristicas: "DESHUMIDIFICADOR PARA AMBIENTE TIPO COMERCIAL, M...",
     observaciones: "LIB-009458-24",
-    ctaContable: "150020090-AIRE ACONDICIONADO Y REFRIGERACION",
+    ctaContable: "150302090I-AIRE ACONDICIONADO Y REFRIGERACION",
+    paisProcedencia: "PERU",
+    almacen: "01000-ALMACEN CENTRAL",
+    nroDoc: "005909",
+    fecha: "15/03/2008",
+    proveedor: "",
+    valorCompra: "1,121.00",
+    garantia: "",
+    fechaGarantia: "00/00/0000",
+    nroContrato: "",
+    tipoDoc: "Pedido - Comprobante de Salida (PECOSA)",
+    altaDoc: "005909",
+    ingresoDelBienPor: "O/C",
+    salida: false,
+    activoDepreciable: true,
+    inst: true,
+    nroSerieEstado: "Bueno",
+    estadoActual: "Bueno",
   };
 
   const data = assetData || defaultData;
@@ -97,7 +134,7 @@ export default function ViewAssetModal({
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black bg-opacity-60 backdrop-blur-sm">
-      <div className="bg-white rounded-xl shadow-2xl w-full max-w-6xl h-[90vh] flex flex-col overflow-hidden border border-gray-200">
+      <div className="bg-white rounded-xl shadow-2xl w-full max-w-7xl h-[90vh] flex flex-col overflow-hidden border border-gray-200">
         {/* Header Profesional */}
         <div className="p-6 text-white border-b bg-gradient-to-r from-blue-600 to-blue-700">
           <div className="flex items-center justify-between">
@@ -150,12 +187,13 @@ export default function ViewAssetModal({
           </div>
         </div>
 
-        {/* Content */}
+        {/* Content con 4 columnas */}
         <div className="flex-1 p-6 overflow-y-auto bg-gray-50">
-          <div className="grid grid-cols-1 gap-6 lg:grid-cols-4">
+          <div className="grid grid-cols-1 gap-4 lg:grid-cols-4">
             {/* Columna 1 */}
-            <div className="space-y-4">
-              <div className="p-4 bg-white border border-gray-200 rounded-lg">
+            <div className="space-y-3">
+              {/* Item */}
+              <div className="p-3 bg-white border border-gray-200 rounded-lg">
                 <Label className="text-xs font-medium text-blue-800">
                   Item
                 </Label>
@@ -164,7 +202,8 @@ export default function ViewAssetModal({
                 </div>
               </div>
 
-              <div className="p-4 bg-white border border-gray-200 rounded-lg">
+              {/* Código Patrimonial */}
+              <div className="p-3 bg-white border border-gray-200 rounded-lg">
                 <Label className="text-xs font-medium text-blue-800">
                   Cód. Patrimonial
                 </Label>
@@ -173,25 +212,18 @@ export default function ViewAssetModal({
                 </div>
               </div>
 
-              <div className="p-4 bg-white border border-gray-200 rounded-lg">
-                <Label className="text-xs font-medium text-blue-800">
-                  Código Barra/Inv Anterior
-                </Label>
-                <div className="p-2 mt-1 font-mono text-sm border rounded bg-gray-50">
-                  {data.codigoBarra}
-                </div>
-              </div>
-
-              <div className="p-4 bg-white border border-gray-200 rounded-lg">
+              {/* Descripción */}
+              <div className="p-3 bg-white border border-gray-200 rounded-lg">
                 <Label className="text-xs font-medium text-blue-800">
                   Descripción
                 </Label>
-                <div className="mt-1 p-2 bg-gray-50 rounded border text-sm min-h-[60px]">
+                <div className="mt-1 p-2 bg-gray-50 rounded border text-sm min-h-[50px]">
                   {data.descripcion}
                 </div>
               </div>
 
-              <div className="p-4 bg-white border border-gray-200 rounded-lg">
+              {/* Sede */}
+              <div className="p-3 bg-white border border-gray-200 rounded-lg">
                 <Label className="text-xs font-medium text-blue-800">
                   Sede
                 </Label>
@@ -200,7 +232,8 @@ export default function ViewAssetModal({
                 </div>
               </div>
 
-              <div className="p-4 bg-white border border-gray-200 rounded-lg">
+              {/* Centro Costo */}
+              <div className="p-3 bg-white border border-gray-200 rounded-lg">
                 <Label className="text-xs font-medium text-blue-800">
                   Centro Costo
                 </Label>
@@ -209,7 +242,8 @@ export default function ViewAssetModal({
                 </div>
               </div>
 
-              <div className="p-4 bg-white border border-gray-200 rounded-lg">
+              {/* Ubicación Física */}
+              <div className="p-3 bg-white border border-gray-200 rounded-lg">
                 <Label className="text-xs font-medium text-blue-800">
                   Ubic. Física
                 </Label>
@@ -218,7 +252,8 @@ export default function ViewAssetModal({
                 </div>
               </div>
 
-              <div className="p-4 bg-white border border-gray-200 rounded-lg">
+              {/* Responsable */}
+              <div className="p-3 bg-white border border-gray-200 rounded-lg">
                 <Label className="text-xs font-medium text-blue-800">
                   Responsable
                 </Label>
@@ -227,7 +262,8 @@ export default function ViewAssetModal({
                 </div>
               </div>
 
-              <div className="p-4 bg-white border border-gray-200 rounded-lg">
+              {/* Usuario Final */}
+              <div className="p-3 bg-white border border-gray-200 rounded-lg">
                 <Label className="text-xs font-medium text-blue-800">
                   Usuario Final
                 </Label>
@@ -235,44 +271,12 @@ export default function ViewAssetModal({
                   {data.usuarioFinal}
                 </div>
               </div>
-
-              <div className="p-4 bg-white border border-gray-200 rounded-lg">
-                <Label className="text-xs font-medium text-blue-800">
-                  Tipo Ingreso
-                </Label>
-                <div className="p-2 mt-1 text-sm border rounded bg-gray-50">
-                  {data.tipoIngreso}
-                </div>
-              </div>
-
-              <div className="p-4 bg-white border border-gray-200 rounded-lg">
-                <Label className="block mb-2 text-xs font-medium text-blue-800">
-                  Verificaciones
-                </Label>
-                <div className="space-y-2">
-                  <div className="flex items-center space-x-2">
-                    <Checkbox
-                      checked={data.verificacionFisica}
-                      disabled
-                      className="border-blue-400"
-                    />
-                    <span className="text-xs">Verif Física/Digital</span>
-                  </div>
-                  <div className="flex items-center space-x-2">
-                    <Checkbox
-                      checked={data.etiquetado}
-                      disabled
-                      className="border-blue-400"
-                    />
-                    <span className="text-xs">Etiquetado</span>
-                  </div>
-                </div>
-              </div>
             </div>
 
             {/* Columna 2 */}
-            <div className="space-y-4">
-              <div className="p-4 bg-white border border-gray-200 rounded-lg">
+            <div className="space-y-3">
+              {/* Correlativo */}
+              <div className="p-3 bg-white border border-gray-200 rounded-lg">
                 <Label className="text-xs font-medium text-blue-800">
                   Correlativo
                 </Label>
@@ -281,16 +285,39 @@ export default function ViewAssetModal({
                 </div>
               </div>
 
-              <div className="p-4 bg-white border border-gray-200 rounded-lg">
+              {/* Código Barra */}
+              <div className="p-3 bg-white border border-gray-200 rounded-lg">
                 <Label className="text-xs font-medium text-blue-800">
-                  Estado
+                  Código Barra/Inv Anterior
                 </Label>
-                <div className="p-2 mt-1 text-sm font-medium text-green-700 border rounded bg-green-50">
-                  {data.estado}
+                <div className="p-2 mt-1 font-mono text-sm border rounded bg-gray-50">
+                  {data.codigoBarra}
                 </div>
               </div>
 
-              <div className="p-4 bg-white border border-gray-200 rounded-lg">
+              {/* SBN con checkbox */}
+              <div className="p-3 bg-white border border-gray-200 rounded-lg">
+                <Label className="text-xs font-medium text-blue-800">SBN</Label>
+                <div className="flex items-center mt-1 space-x-2">
+                  <Checkbox disabled className="border-blue-400" />
+                  <span className="text-xs text-gray-600">
+                    Activo Depreciable
+                  </span>
+                </div>
+              </div>
+
+              {/* Tipo Ingreso */}
+              <div className="p-3 bg-white border border-gray-200 rounded-lg">
+                <Label className="text-xs font-medium text-blue-800">
+                  Tipo Ingreso
+                </Label>
+                <div className="p-2 mt-1 text-sm border rounded bg-gray-50">
+                  {data.tipoIngreso}
+                </div>
+              </div>
+
+              {/* Fecha Ingreso */}
+              <div className="p-3 bg-white border border-gray-200 rounded-lg">
                 <Label className="text-xs font-medium text-blue-800">
                   Fecha Ingreso
                 </Label>
@@ -299,46 +326,84 @@ export default function ViewAssetModal({
                 </div>
               </div>
 
-              <div className="p-4 bg-white border border-gray-200 rounded-lg">
+              {/* Verificación Física/Digital */}
+              <div className="p-3 bg-white border border-gray-200 rounded-lg">
                 <Label className="text-xs font-medium text-blue-800">
-                  Marca
+                  Verif. Física/Digital
                 </Label>
-                <div className="p-2 mt-1 text-sm border rounded bg-gray-50">
-                  {data.marca}
+                <div className="flex items-center mt-1 space-x-2">
+                  <Checkbox
+                    checked={data.verificacionFisica}
+                    disabled
+                    className="border-blue-400"
+                  />
+                  <span className="text-xs text-gray-600">Verificado</span>
                 </div>
               </div>
 
-              <div className="p-4 bg-white border border-gray-200 rounded-lg">
+              {/* Etiquetado */}
+              <div className="p-3 bg-white border border-gray-200 rounded-lg">
                 <Label className="text-xs font-medium text-blue-800">
-                  Medidas
+                  Etiquetado
                 </Label>
-                <div className="p-2 mt-1 text-sm border rounded bg-gray-50">
-                  {data.medidas || "No especificado"}
+                <div className="flex items-center mt-1 space-x-2">
+                  <Checkbox
+                    checked={data.etiquetado}
+                    disabled
+                    className="border-blue-400"
+                  />
+                  <span className="text-xs text-gray-600">Etiquetado</span>
                 </div>
               </div>
 
-              <div className="p-4 bg-white border border-gray-200 rounded-lg">
+              {/* Ingreso del Bien por */}
+              <div className="p-3 bg-white border border-gray-200 rounded-lg">
                 <Label className="text-xs font-medium text-blue-800">
-                  Características
+                  Ingreso del Bien por
                 </Label>
-                <div className="mt-1 p-2 bg-gray-50 rounded border text-sm min-h-[60px]">
-                  {data.caracteristicas}
+                <div className="flex items-center mt-1 space-x-4">
+                  <div className="flex items-center space-x-1">
+                    <input
+                      type="radio"
+                      checked={data.ingresoDelBienPor === "O/C"}
+                      disabled
+                      className="text-blue-600"
+                    />
+                    <span className="text-xs">O/C</span>
+                  </div>
+                  <div className="flex items-center space-x-1">
+                    <input
+                      type="radio"
+                      checked={data.ingresoDelBienPor === "PECOSA"}
+                      disabled
+                      className="text-blue-600"
+                    />
+                    <span className="text-xs">PECOSA</span>
+                  </div>
                 </div>
-              </div>
-
-              <div className="p-4 bg-white border border-gray-200 rounded-lg">
-                <Label className="text-xs font-medium text-blue-800">
-                  Observaciones
-                </Label>
-                <div className="p-2 mt-1 text-sm border rounded bg-gray-50">
-                  {data.observaciones}
+                <div className="p-1 mt-1 text-xs border rounded bg-gray-50">
+                  144
+                </div>
+                <div className="mt-1 text-xs text-gray-500">
+                  Fecha: {data.fecha}
                 </div>
               </div>
             </div>
 
             {/* Columna 3 */}
-            <div className="space-y-4">
-              <div className="p-4 bg-white border border-gray-200 rounded-lg">
+            <div className="space-y-3">
+              {/* País de Procedencia */}
+              <div className="p-3 bg-white border border-gray-200 rounded-lg">
+                <Label className="text-xs font-medium text-blue-800">
+                  País de Procedencia
+                </Label>
+                <div className="p-2 mt-1 text-sm border rounded bg-gray-50">
+                  {data.paisProcedencia}
+                </div>
+              </div>
+
+              {/* Tipo Patrimonio */}
+              <div className="p-3 bg-white border border-gray-200 rounded-lg">
                 <Label className="text-xs font-medium text-blue-800">
                   Tipo Patrimonio
                 </Label>
@@ -347,7 +412,8 @@ export default function ViewAssetModal({
                 </div>
               </div>
 
-              <div className="p-4 bg-white border border-gray-200 rounded-lg">
+              {/* Muebles y Enseres */}
+              <div className="p-3 bg-white border border-gray-200 rounded-lg">
                 <Label className="text-xs font-medium text-blue-800">
                   Muebles y Enseres
                 </Label>
@@ -356,63 +422,118 @@ export default function ViewAssetModal({
                 </div>
               </div>
 
-              <div className="p-4 bg-white border border-gray-200 rounded-lg">
+              {/* Estado */}
+              <div className="p-3 bg-white border border-gray-200 rounded-lg">
                 <Label className="text-xs font-medium text-blue-800">
-                  Nro Serie
+                  Estado
                 </Label>
-                <div className="p-2 mt-1 font-mono text-sm border rounded bg-gray-50">
-                  {data.numeroSerie}
+                <div className="p-2 mt-1 text-sm font-medium text-green-700 border rounded bg-green-50">
+                  {data.estado}
                 </div>
               </div>
 
-              <div className="p-4 bg-white border border-gray-200 rounded-lg">
-                <Label className="text-xs font-medium text-blue-800">
-                  Estado Conserv
-                </Label>
-                <div className="mt-1">
-                  <Select value={data.estadoConservacion} disabled>
-                    <SelectTrigger className="border-gray-300 bg-gray-50">
-                      <SelectValue />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="BUENO">BUENO</SelectItem>
-                      <SelectItem value="REGULAR">REGULAR</SelectItem>
-                      <SelectItem value="MALO">MALO</SelectItem>
-                    </SelectContent>
-                  </Select>
+              {/* Activo Depreciable y Salida */}
+              <div className="p-3 bg-white border border-gray-200 rounded-lg">
+                <div className="space-y-2">
+                  <div className="flex items-center space-x-2">
+                    <Checkbox
+                      checked={data.activoDepreciable}
+                      disabled
+                      className="border-blue-400"
+                    />
+                    <span className="text-xs">Activo Depreciable</span>
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <Checkbox
+                      checked={data.salida}
+                      disabled
+                      className="border-blue-400"
+                    />
+                    <span className="text-xs">Salida</span>
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <Checkbox
+                      checked={data.inst}
+                      disabled
+                      className="border-blue-400"
+                    />
+                    <span className="text-xs">Inst</span>
+                  </div>
                 </div>
               </div>
 
-              <div className="p-4 bg-white border border-gray-200 rounded-lg">
+              {/* Proveedor */}
+              <div className="p-3 bg-white border border-gray-200 rounded-lg">
                 <Label className="text-xs font-medium text-blue-800">
-                  Estado Uso
-                </Label>
-                <div className="mt-1">
-                  <Select value={data.estadoUso} disabled>
-                    <SelectTrigger className="border-gray-300 bg-gray-50">
-                      <SelectValue />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="S">S</SelectItem>
-                      <SelectItem value="N">N</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
-              </div>
-
-              <div className="p-4 bg-white border border-gray-200 rounded-lg">
-                <Label className="text-xs font-medium text-blue-800">
-                  Modelo
+                  Proveedor
                 </Label>
                 <div className="p-2 mt-1 text-sm border rounded bg-gray-50">
-                  {data.modelo}
+                  {data.proveedor || "No especificado"}
+                </div>
+              </div>
+
+              {/* Valor Compra */}
+              <div className="p-3 bg-white border border-gray-200 rounded-lg">
+                <Label className="text-xs font-medium text-blue-800">
+                  Valor Compra
+                </Label>
+                <div className="p-2 mt-1 text-sm font-semibold text-green-700 border rounded bg-green-50">
+                  {data.valorCompra}
+                </div>
+              </div>
+
+              {/* Garantía */}
+              <div className="p-3 bg-white border border-gray-200 rounded-lg">
+                <Label className="text-xs font-medium text-blue-800">
+                  Garantía
+                </Label>
+                <div className="p-2 mt-1 text-sm border rounded bg-gray-50">
+                  {data.garantia || "No especificado"}
+                </div>
+                <div className="mt-1 text-xs text-gray-500">
+                  Fecha: {data.fechaGarantia}
+                </div>
+                <div className="mt-1 text-xs text-gray-500">
+                  N° Contrato: {data.nroContrato || "No aplica"}
                 </div>
               </div>
             </div>
 
             {/* Columna 4 */}
-            <div className="space-y-4">
-              <div className="p-4 bg-white border border-gray-200 rounded-lg">
+            <div className="space-y-3">
+              {/* Almacén */}
+              <div className="p-3 bg-white border border-gray-200 rounded-lg">
+                <Label className="text-xs font-medium text-blue-800">
+                  Almacén
+                </Label>
+                <div className="p-2 mt-1 text-sm border rounded bg-gray-50">
+                  {data.almacen}
+                </div>
+              </div>
+
+              {/* Alta */}
+              <div className="p-3 bg-white border border-gray-200 rounded-lg">
+                <Label className="text-xs font-medium text-blue-800">
+                  Alta
+                </Label>
+                <div className="space-y-1">
+                  <div className="text-xs text-gray-600">Tipo Doc:</div>
+                  <div className="p-2 text-xs border rounded bg-gray-50">
+                    {data.tipoDoc}
+                  </div>
+                  <div className="text-xs text-gray-600">Nro Doc:</div>
+                  <div className="p-2 text-xs border rounded bg-gray-50">
+                    {data.altaDoc}
+                  </div>
+                  <div className="text-xs text-gray-600">Fecha:</div>
+                  <div className="p-2 text-xs border rounded bg-gray-50">
+                    {data.fecha}
+                  </div>
+                </div>
+              </div>
+
+              {/* Cta Contable */}
+              <div className="p-3 bg-white border border-gray-200 rounded-lg">
                 <Label className="text-xs font-medium text-blue-800">
                   Cta Contable
                 </Label>
@@ -421,16 +542,99 @@ export default function ViewAssetModal({
                 </div>
               </div>
 
-              {/* Espacio para más campos si es necesario */}
-              <div className="p-4 border border-blue-200 rounded-lg bg-blue-50">
-                <div className="text-center">
-                  <Package className="w-12 h-12 mx-auto mb-2 text-blue-400" />
-                  <p className="text-sm font-medium text-blue-700">
-                    Activo Patrimonial
-                  </p>
-                  <p className="mt-1 text-xs text-blue-600">
-                    Ministerio Público
-                  </p>
+              {/* Nro Serie */}
+              <div className="p-3 bg-white border border-gray-200 rounded-lg">
+                <Label className="text-xs font-medium text-blue-800">
+                  Nro Serie
+                </Label>
+                <div className="p-2 mt-1 font-mono text-sm border rounded bg-gray-50">
+                  {data.numeroSerie}
+                </div>
+                <div className="mt-1 text-xs text-gray-500">
+                  Estado: {data.nroSerieEstado}
+                </div>
+              </div>
+
+              {/* Estado Conservación */}
+              <div className="p-3 bg-white border border-gray-200 rounded-lg">
+                <Label className="text-xs font-medium text-blue-800">
+                  Estado Conserv
+                </Label>
+                <Select value={data.estadoConservacion} disabled>
+                  <SelectTrigger className="border-gray-300 bg-gray-50">
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="Bueno">Bueno</SelectItem>
+                    <SelectItem value="Regular">Regular</SelectItem>
+                    <SelectItem value="Malo">Malo</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+
+              {/* Estado Uso */}
+              <div className="p-3 bg-white border border-gray-200 rounded-lg">
+                <Label className="text-xs font-medium text-blue-800">
+                  Estado Uso
+                </Label>
+                <Select value={data.estadoUso} disabled>
+                  <SelectTrigger className="border-gray-300 bg-gray-50">
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="Si">Si</SelectItem>
+                    <SelectItem value="No">No</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+
+              {/* Marca */}
+              <div className="p-3 bg-white border border-gray-200 rounded-lg">
+                <Label className="text-xs font-medium text-blue-800">
+                  Marca
+                </Label>
+                <div className="p-2 mt-1 text-sm border rounded bg-gray-50">
+                  {data.marca}
+                </div>
+              </div>
+
+              {/* Modelo */}
+              <div className="p-3 bg-white border border-gray-200 rounded-lg">
+                <Label className="text-xs font-medium text-blue-800">
+                  Modelo
+                </Label>
+                <div className="p-2 mt-1 text-sm border rounded bg-gray-50">
+                  {data.modelo}
+                </div>
+              </div>
+
+              {/* Medidas */}
+              <div className="p-3 bg-white border border-gray-200 rounded-lg">
+                <Label className="text-xs font-medium text-blue-800">
+                  Medidas
+                </Label>
+                <div className="p-2 mt-1 text-sm border rounded bg-gray-50">
+                  {data.medidas || "No especificado"}
+                </div>
+              </div>
+
+              {/* Características */}
+              <div className="p-3 bg-white border border-gray-200 rounded-lg">
+                <Label className="text-xs font-medium text-blue-800">
+                  Características
+                </Label>
+                <div className="mt-1 p-2 bg-gray-50 rounded border text-sm min-h-[40px]">
+                  {data.caracteristicas}
+                </div>
+              </div>
+
+              {/* Observaciones */}
+              <div className="p-3 bg-white border border-gray-200 rounded-lg">
+                <Label className="text-xs font-medium text-blue-800">
+                  Observaciones
+                </Label>
+                <div className="p-2 mt-1 text-sm border rounded bg-gray-50">
+                  {data.observaciones}
                 </div>
               </div>
             </div>
