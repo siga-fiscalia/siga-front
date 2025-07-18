@@ -55,8 +55,7 @@ export default function EditPersonnelModal({
     apellidoMaterno: personnel.fullName.split(", ")[0].split(" ")[1] || "",
     nombres: personnel.fullName.split(", ")[1] || "",
 
-    // Documento
-    tipoDocumento: "DNI",
+    // Documento - Solo DNI
     numeroDocumento: personnel.dni,
 
     // Estado Civil y Personal
@@ -153,7 +152,7 @@ export default function EditPersonnelModal({
               </div>
               <div>
                 <h2 className="text-xl font-bold">
-                  Nuevo registro de personal
+                  Editar registro de personal
                 </h2>
                 <p className="text-sm text-blue-100">
                   Ministerio Público - Sistema Integral de Gestion de Almacenes
@@ -250,31 +249,7 @@ export default function EditPersonnelModal({
                   className="border-blue-200 focus:border-blue-500 focus:ring-blue-500"
                 />
               </div>
-              <div className="space-y-2">
-                <Label
-                  htmlFor="tipo-documento"
-                  className="font-medium text-blue-800"
-                >
-                  Documento
-                </Label>
-                <Select
-                  value={formData.tipoDocumento}
-                  onValueChange={(value) =>
-                    handleInputChange("tipoDocumento", value)
-                  }
-                >
-                  <SelectTrigger className="border-blue-200 focus:border-blue-500 focus:ring-blue-500">
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="DNI">DNI</SelectItem>
-                    <SelectItem value="PASAPORTE">Pasaporte</SelectItem>
-                    <SelectItem value="CARNET_EXTRANJERIA">
-                      Carnet de Extranjería
-                    </SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
+              
               <div className="space-y-2">
                 <Label
                   htmlFor="numero-documento"
@@ -289,8 +264,11 @@ export default function EditPersonnelModal({
                     handleInputChange("numeroDocumento", e.target.value)
                   }
                   className="border-blue-200 focus:border-blue-500 focus:ring-blue-500"
+                  placeholder="12345678"
+                  maxLength={8}
                 />
               </div>
+              
               <div className="space-y-2">
                 <Label
                   htmlFor="estado-civil"
@@ -820,7 +798,6 @@ export default function EditPersonnelModal({
                 </Label>
                 <Input
                   id="telefono"
-                  value={formData.telefono}
                   onChange={(e) =>
                     handleInputChange("telefono", e.target.value)
                   }
