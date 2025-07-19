@@ -9,6 +9,9 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import NewLocationModal from "@/components/NewLocationModal";
+import EditLocationModal from "@/components/EditLocationModal";
+import DeleteLocationModal from "@/components/DeleteLocationModal";
 import {
   Search,
   Filter,
@@ -51,8 +54,15 @@ export default function Locations() {
   const [search, setSearch] = useState<string>("");
   const [statusFilter, setStatusFilter] = useState<string>("all");
   const [typeFilter, setTypeFilter] = useState<string>("all");
+  const [editingLocation, setEditingLocation] =
+    useState<PhysicalLocation | null>(null);
+  const [deletingLocation, setDeletingLocation] =
+    useState<PhysicalLocation | null>(null);
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const [isNewModalOpen, setIsNewModalOpen] = useState(false);
 
-  const [locationsList] = useState<PhysicalLocation[]>([
+  const [locationsList, setLocationsList] = useState<PhysicalLocation[]>([
     {
       id: 1,
       tipo: "22",
@@ -238,6 +248,54 @@ export default function Locations() {
     new Set(locationsList.map((l) => l.tipo))
   ).length;
 
+  const handleEdit = (location: PhysicalLocation) => {
+    setEditingLocation(location);
+    setIsEditModalOpen(true);
+  };
+
+  const handleDelete = (location: PhysicalLocation) => {
+    setDeletingLocation(location);
+    setIsDeleteModalOpen(true);
+  };
+
+  const handleSave = (updatedLocation: PhysicalLocation) => {
+    setLocationsList((prev) =>
+      prev.map((location) =>
+        location.id === updatedLocation.id ? updatedLocation : location
+      )
+    );
+  };
+
+  const handleConfirmDelete = (locationId: number) => {
+    setLocationsList((prev) =>
+      prev.filter((location) => location.id !== locationId)
+    );
+    console.log(`Ubicación ${locationId} eliminada exitosamente`);
+  };
+
+  const handleCloseEditModal = () => {
+    setIsEditModalOpen(false);
+    setEditingLocation(null);
+  };
+
+  const handleCloseDeleteModal = () => {
+    setIsDeleteModalOpen(false);
+    setDeletingLocation(null);
+  };
+
+  const handleOpenNewModal = () => {
+    setIsNewModalOpen(true);
+  };
+
+  const handleCloseNewModal = () => {
+    setIsNewModalOpen(false);
+  };
+
+  const handleSaveNewLocation = (newLocation: PhysicalLocation) => {
+    setLocationsList((prev) => [...prev, newLocation]);
+    console.log("Nueva ubicación agregada:", newLocation);
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-50">
       {/* Header Principal */}
@@ -259,6 +317,7 @@ export default function Locations() {
               <Button
                 className="text-blue-600 bg-white border-0 shadow-lg hover:bg-blue-50"
                 size="lg"
+                onClick={handleOpenNewModal}
               >
                 <Plus className="w-5 h-5 mr-2" />
                 Nueva Ubicación
@@ -499,6 +558,7 @@ export default function Locations() {
                           <Button
                             size="sm"
                             variant="outline"
+                            onClick={() => handleEdit(location)}
                             className="text-blue-700 border-blue-200 hover:bg-blue-50"
                           >
                             <Edit className="w-3 h-3 mr-1" />
@@ -507,6 +567,7 @@ export default function Locations() {
                           <Button
                             size="sm"
                             variant="outline"
+                            onClick={() => handleDelete(location)}
                             className="text-red-700 border-red-200 hover:bg-red-50"
                           >
                             <Trash2 className="w-3 h-3 mr-1" />
@@ -541,6 +602,29 @@ export default function Locations() {
           </div>
         </Card>
       </div>
+
+      {/* Modales */}
+      {editingLocation && (
+        <EditLocationModal
+          location={editingLocation}
+          isOpen={isEditModalOpen}
+          onClose={handleCloseEditModal}
+          onSave={handleSave}
+        />
+      )}
+
+      <DeleteLocationModal
+        location={deletingLocation}
+        isOpen={isDeleteModalOpen}
+        onClose={handleCloseDeleteModal}
+        onConfirm={handleConfirmDelete}
+      />
+
+      <NewLocationModal
+        isOpen={isNewModalOpen}
+        onClose={handleCloseNewModal}
+        onSave={handleSaveNewLocation}
+      />
     </div>
   );
 }

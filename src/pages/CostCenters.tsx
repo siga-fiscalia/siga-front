@@ -11,6 +11,7 @@ import {
 } from "@/components/ui/select";
 import EditCostCenterModal from "@/components/EditCostCenterModal";
 import DeleteCostCenterModal from "@/components/DeleteCostCenterModal";
+import NewCostCenterModal from "@/components/NewCostCenterModal";
 import {
   Search,
   Filter,
@@ -62,6 +63,7 @@ export default function CostCenters() {
     useState<CostCenter | null>(null);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const [isNewModalOpen, setIsNewModalOpen] = useState(false);
 
   const [costCentersList, setCostCentersList] = useState<CostCenter[]>([
     {
@@ -187,6 +189,19 @@ export default function CostCenters() {
     setDeletingCostCenter(null);
   };
 
+  const handleOpenNewModal = () => {
+    setIsNewModalOpen(true);
+  };
+
+  const handleCloseNewModal = () => {
+    setIsNewModalOpen(false);
+  };
+
+  const handleSaveNewCostCenter = (newCostCenter: CostCenter) => {
+    setCostCentersList((prev) => [...prev, newCostCenter]);
+    console.log("Nuevo centro de costo agregado:", newCostCenter);
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-50">
       {/* Header Principal */}
@@ -210,6 +225,7 @@ export default function CostCenters() {
               <Button
                 className="text-blue-600 bg-white border-0 shadow-lg hover:bg-blue-50"
                 size="lg"
+                onClick={handleOpenNewModal}
               >
                 <Plus className="w-5 h-5 mr-2" />
                 Nuevo Centro de Costo
@@ -543,6 +559,12 @@ export default function CostCenters() {
         isOpen={isDeleteModalOpen}
         onClose={handleCloseDeleteModal}
         onConfirm={handleConfirmDelete}
+      />
+
+      <NewCostCenterModal
+        isOpen={isNewModalOpen}
+        onClose={handleCloseNewModal}
+        onSave={handleSaveNewCostCenter}
       />
     </div>
   );
