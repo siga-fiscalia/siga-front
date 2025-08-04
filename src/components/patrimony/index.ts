@@ -9,6 +9,7 @@ export { default as CustodyAssetsTab } from "./tabs/CustodyAssetsTab";
 export { default as PatrimonyFilters } from "./common/PatrimonyFilters";
 export { default as PatrimonyTable } from "./common/PatrimonyTable";
 export { default as DetailPanel } from "./common/DetailPanel";
+export { default as ReportsModal } from "./common/ReportsModal";
 
 // Hooks
 export { usePatrimonyData } from "../../hooks/usePatrimonyData";
