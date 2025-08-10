@@ -89,12 +89,6 @@ export default function AppSidebar() {
       section: "Otros Módulos",
       items: [
         {
-          title: "Reportes",
-          url: "/reportes",
-          icon: FileText,
-          description: "Generar reportes del sistema",
-        },
-        {
           title: "Importar y Exportar",
           url: "/importar",
           icon: Database,

@@ -11,7 +11,6 @@ import {
   AlertTriangle,
   CheckCircle,
   Clock,
-  FileText,
   Calendar,
   Activity,
   Database,
@@ -32,7 +31,7 @@ interface DashboardStat {
 
 interface RecentActivity {
   id: number;
-  type: "IMPORT" | "EXPORT" | "ASSIGNMENT" | "INVENTORY" | "REPORT";
+  type: "IMPORT" | "EXPORT" | "ASSIGNMENT" | "INVENTORY";
   title: string;
   description: string;
   user: string;
@@ -133,15 +132,6 @@ export default function Dashboard() {
     },
     {
       id: 4,
-      type: "REPORT",
-      title: "Reporte de valorización generado",
-      description: "Reporte financiero Q4 2023 - Total S/ 2,450,000",
-      user: "VARGAS MENDEZ, LUIS",
-      timestamp: "2024-01-14 09:15",
-      status: "SUCCESS",
-    },
-    {
-      id: 5,
       type: "EXPORT",
       title: "Exportación de personal",
       description: "Error al exportar listado de personal activo",
@@ -186,14 +176,6 @@ export default function Dashboard() {
     },
     {
       id: 5,
-      title: "Reportes",
-      description: "Generar reportes y análisis",
-      icon: FileText,
-      color: "indigo",
-      route: "/reportes",
-    },
-    {
-      id: 6,
       title: "Importar/Exportar",
       description: "Gestionar datos externos",
       icon: Database,
@@ -223,8 +205,6 @@ export default function Dashboard() {
         return <Users className="w-5 h-5 text-purple-600" />;
       case "INVENTORY":
         return <BarChart3 className="w-5 h-5 text-green-600" />;
-      case "REPORT":
-        return <FileText className="w-5 h-5 text-indigo-600" />;
     }
   };
 
@@ -438,8 +418,6 @@ export default function Dashboard() {
                         "bg-purple-100 text-purple-600 hover:bg-purple-200",
                       orange:
                         "bg-orange-100 text-orange-600 hover:bg-orange-200",
-                      indigo:
-                        "bg-indigo-100 text-indigo-600 hover:bg-indigo-200",
                       pink: "bg-pink-100 text-pink-600 hover:bg-pink-200",
                     };
 
@@ -492,14 +470,6 @@ export default function Dashboard() {
                   </p>
                 </div>
               </div>
-              <Button
-                variant="outline"
-                size="sm"
-                className="text-white border-white hover:bg-white hover:text-green-600"
-              >
-                <FileText className="w-4 h-4 mr-2" />
-                Ver Reporte
-              </Button>
             </div>
           </div>
 
