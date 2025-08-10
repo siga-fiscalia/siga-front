@@ -35,7 +35,7 @@ interface ImportExportRecord {
   type: "IMPORT" | "EXPORT";
   operation: string;
   description: string;
-  format: "XLS" | "XLSX" | "CSV" | "TXT" | "PDF";
+  format: "XLSX" | "PDF" | "TXT";
   status: "EXITOSO" | "PROCESANDO" | "ERROR" | "PENDIENTE";
   fileName: string;
   fileSize?: string;
@@ -52,7 +52,7 @@ interface ImportTemplate {
   name: string;
   description: string;
   module: "BIENES" | "PERSONAL" | "CENTROS" | "INVENTARIO";
-  format: "XLS" | "XLSX" | "CSV";
+  format: "XLSX";
   icon: any;
   sampleFile?: string;
   requiredFields: string[];
@@ -63,7 +63,7 @@ interface ExportTemplate {
   name: string;
   description: string;
   module: "BIENES" | "PERSONAL" | "CENTROS" | "INVENTARIO";
-  format: "PDF" | "EXCEL" | "CSV" | "TXT";
+  format: "PDF" | "XLSX" | "TXT";
   icon: any;
   estimatedSize: string;
   parameters?: string[];
@@ -129,9 +129,9 @@ export default function ImportExport() {
       description:
         "Importar datos de bienes patrimoniales desde el sistema SIGA",
       module: "BIENES",
-      format: "XLS",
+      format: "XLSX",
       icon: Package,
-      sampleFile: "template_siga_bienes.xls",
+      sampleFile: "template_siga_bienes.xlsx",
       requiredFields: [
         "Código Patrimonial",
         "Descripción",
@@ -154,9 +154,9 @@ export default function ImportExport() {
       name: "Importar Centros de Costo",
       description: "Cargar información de centros de costo",
       module: "CENTROS",
-      format: "CSV",
+      format: "XLSX",
       icon: Building2,
-      sampleFile: "template_centros.csv",
+      sampleFile: "template_centros.xlsx",
       requiredFields: ["Código", "Descripción", "Dirección", "Distrito"],
     },
     {
@@ -188,18 +188,18 @@ export default function ImportExport() {
       name: "Exportar Personal a Excel",
       description: "Exportar base de datos completa del personal",
       module: "PERSONAL",
-      format: "EXCEL",
+      format: "XLSX",
       icon: FileSpreadsheet,
       estimatedSize: "1-3 MB",
       parameters: ["Departamento", "Estado", "Tipo empleado"],
     },
     {
       id: 3,
-      name: "Exportar Inventario a CSV",
+      name: "Exportar Inventario a Excel",
       description: "Exportar datos de inventario para análisis",
       module: "INVENTARIO",
-      format: "CSV",
-      icon: Database,
+      format: "XLSX",
+      icon: FileSpreadsheet,
       estimatedSize: "5-10 MB",
       parameters: ["Año", "Centro de costo", "Estado conservación"],
     },
@@ -213,6 +213,26 @@ export default function ImportExport() {
       estimatedSize: "10-20 MB",
       parameters: ["Tipo reporte", "Periodo", "Filtros"],
     },
+    {
+      id: 5,
+      name: "Exportar Centros a PDF",
+      description: "Reporte de centros de costo en formato PDF",
+      module: "CENTROS",
+      format: "PDF",
+      icon: File,
+      estimatedSize: "2-5 MB",
+      parameters: ["Distrito", "Estado", "Fecha corte"],
+    },
+    {
+      id: 6,
+      name: "Exportar Personal a TXT",
+      description: "Listado de personal en formato texto plano",
+      module: "PERSONAL",
+      format: "TXT",
+      icon: FileText,
+      estimatedSize: "500 KB - 1 MB",
+      parameters: ["Departamento", "Estado", "Formato"],
+    },
   ]);
 
   const [operationHistory] = useState<ImportExportRecord[]>([
@@ -221,9 +241,9 @@ export default function ImportExport() {
       type: "IMPORT",
       operation: "Importar desde SIGA",
       description: "Bienes patrimoniales - Actualización enero 2024",
-      format: "XLS",
+      format: "XLSX",
       status: "EXITOSO",
-      fileName: "inventario_siga_enero_2024.xls",
+      fileName: "inventario_siga_enero_2024.xlsx",
       fileSize: "3.2 MB",
       recordsCount: 247,
       processedDate: "2024-01-15",
@@ -263,24 +283,24 @@ export default function ImportExport() {
       type: "IMPORT",
       operation: "Importar desde SIGA",
       description: "Importación diciembre 2023",
-      format: "XLS",
+      format: "XLSX",
       status: "ERROR",
-      fileName: "inventario_siga_diciembre_2023.xls",
+      fileName: "inventario_siga_diciembre_2023.xlsx",
       fileSize: "2.9 MB",
       recordsCount: 0,
       processedDate: "2024-01-10",
       processedBy: "MORALES CASTRO, JUAN",
       source: "Sistema SIGA",
-      errorMessage: "Formato de archivo incompatible",
+      errorMessage: "Formato de columnas incorrecto",
     },
     {
       id: 5,
       type: "EXPORT",
-      operation: "Exportar Personal a Excel",
+      operation: "Exportar Personal a PDF",
       description: "Listado completo personal activo",
-      format: "XLSX",
+      format: "PDF",
       status: "PENDIENTE",
-      fileName: "personal_activo_2024.xlsx",
+      fileName: "personal_activo_2024.pdf",
       processedDate: "2024-01-08",
       processedBy: "VARGAS MENDEZ, LUIS",
       destination: "Sistema Planillas",
@@ -342,8 +362,8 @@ export default function ImportExport() {
                   Importar y Exportar Datos
                 </h1>
                 <p className="text-sm text-blue-100">
-                  Gestión de Importación y Exportación de Datos - Ministerio
-                  Público
+                  Gestión de Importación (Excel) y Exportación (Excel/PDF/TXT) -
+                  Ministerio Público
                 </p>
               </div>
             </div>
@@ -420,15 +440,17 @@ export default function ImportExport() {
           </Card>
         </div>
 
-        {/* Sección de Importación */}
+        {/* Sección de Importación - Solo Excel */}
         <Card className="mb-6 border-0 shadow-lg">
           <div className="p-6 text-white rounded-t-lg bg-gradient-to-r from-green-600 to-green-700">
             <div className="flex items-center space-x-3">
               <Upload className="w-6 h-6" />
               <div>
-                <h3 className="text-xl font-bold">Importar Datos</h3>
+                <h3 className="text-xl font-bold">
+                  Importar Datos - Solo Excel
+                </h3>
                 <p className="text-sm text-green-100">
-                  Cargar información desde archivos externos al sistema
+                  Cargar información desde archivos Excel (.xlsx) únicamente
                 </p>
               </div>
             </div>
@@ -460,7 +482,9 @@ export default function ImportExport() {
                           </p>
                           <div className="mb-3 text-xs text-gray-500">
                             <span className="font-medium">Formato:</span>{" "}
-                            {template.format}
+                            <span className="px-2 py-1 text-xs font-medium text-green-700 bg-green-100 rounded">
+                              XLSX
+                            </span>
                           </div>
                           <div className="mb-4 text-xs text-gray-500">
                             <span className="font-medium">
@@ -477,7 +501,7 @@ export default function ImportExport() {
                           className="w-full text-green-700 border-green-200 hover:bg-green-50"
                         >
                           <Download className="w-3 h-3 mr-2" />
-                          Descargar Plantilla
+                          Descargar Plantilla Excel
                         </Button>
                         <Button
                           size="sm"
@@ -485,7 +509,7 @@ export default function ImportExport() {
                           onClick={() => fileInputRef.current?.click()}
                         >
                           <Upload className="w-3 h-3 mr-2" />
-                          Seleccionar Archivo
+                          Seleccionar Archivo Excel
                         </Button>
                       </div>
                     </div>
@@ -496,36 +520,48 @@ export default function ImportExport() {
             <input
               ref={fileInputRef}
               type="file"
-              accept=".xls,.xlsx,.csv"
+              accept=".xlsx"
               className="hidden"
               onChange={(e) => {
                 const file = e.target.files?.[0];
                 if (file) {
-                  console.log("Archivo seleccionado:", file.name);
+                  if (!file.name.endsWith(".xlsx")) {
+                    alert("Solo se permiten archivos Excel (.xlsx)");
+                    e.target.value = "";
+                    return;
+                  }
+                  console.log("Archivo Excel seleccionado:", file.name);
                 }
               }}
             />
           </div>
         </Card>
 
-        {/* Sección de Exportación */}
+        {/* Sección de Exportación - Excel, PDF y TXT */}
         <Card className="mb-6 border-0 shadow-lg">
           <div className="p-6 text-white rounded-t-lg bg-gradient-to-r from-orange-600 to-orange-700">
             <div className="flex items-center space-x-3">
               <Download className="w-6 h-6" />
               <div>
-                <h3 className="text-xl font-bold">Exportar Datos</h3>
+                <h3 className="text-xl font-bold">
+                  Exportar Datos - Excel, PDF y TXT
+                </h3>
                 <p className="text-sm text-orange-100">
-                  Generar archivos de datos para uso externo
+                  Generar archivos en formatos Excel, PDF o texto plano
                 </p>
               </div>
             </div>
           </div>
 
           <div className="p-6 bg-white">
-            <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-4">
+            <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
               {exportTemplates.map((template) => {
                 const IconComponent = template.icon;
+                const formatColors = {
+                  XLSX: "bg-green-100 text-green-700 border-green-200",
+                  PDF: "bg-red-100 text-red-700 border-red-200",
+                  TXT: "bg-blue-100 text-blue-700 border-blue-200",
+                };
                 return (
                   <Card
                     key={template.id}
@@ -548,7 +584,15 @@ export default function ImportExport() {
                           </p>
                           <div className="mb-3 text-xs text-gray-500">
                             <span className="font-medium">Formato:</span>{" "}
-                            {template.format}
+                            <span
+                              className={`px-2 py-1 text-xs font-medium rounded border ${
+                                formatColors[
+                                  template.format as keyof typeof formatColors
+                                ]
+                              }`}
+                            >
+                              {template.format}
+                            </span>
                           </div>
                           <div className="mb-4 text-xs text-gray-500">
                             <span className="font-medium">Tamaño est.:</span>{" "}
@@ -561,7 +605,7 @@ export default function ImportExport() {
                         className="w-full text-white bg-orange-600 hover:bg-orange-700"
                       >
                         <Download className="w-3 h-3 mr-2" />
-                        Exportar Datos
+                        Exportar como {template.format}
                       </Button>
                     </div>
                   </Card>
@@ -607,8 +651,10 @@ export default function ImportExport() {
                   </SelectTrigger>
                   <SelectContent>
                     <SelectItem value="all">Todos los tipos</SelectItem>
-                    <SelectItem value="IMPORT">Importación</SelectItem>
-                    <SelectItem value="EXPORT">Exportación</SelectItem>
+                    <SelectItem value="IMPORT">Importación (Excel)</SelectItem>
+                    <SelectItem value="EXPORT">
+                      Exportación (Excel/PDF/TXT)
+                    </SelectItem>
                   </SelectContent>
                 </Select>
               </div>
@@ -659,7 +705,8 @@ export default function ImportExport() {
               <div>
                 <h3 className="text-xl font-bold">Historial de Operaciones</h3>
                 <p className="mt-1 text-sm text-blue-100">
-                  Registro completo de importaciones y exportaciones realizadas
+                  Registro de importaciones (Excel) y exportaciones
+                  (Excel/PDF/TXT)
                 </p>
               </div>
               <div className="text-right">
@@ -743,8 +790,20 @@ export default function ImportExport() {
                           <div className="text-sm font-medium text-gray-900">
                             {operation.fileName}
                           </div>
-                          <div className="text-xs text-gray-500">
-                            {operation.fileSize || "-"} • {operation.format}
+                          <div className="flex items-center space-x-2 text-xs text-gray-500">
+                            <span>{operation.fileSize || "-"}</span>
+                            <span>•</span>
+                            <span
+                              className={`px-2 py-1 rounded text-xs font-medium ${
+                                operation.format === "XLSX"
+                                  ? "bg-green-100 text-green-700"
+                                  : operation.format === "PDF"
+                                  ? "bg-red-100 text-red-700"
+                                  : "bg-blue-100 text-blue-700"
+                              }`}
+                            >
+                              {operation.format}
+                            </span>
                           </div>
                         </div>
                       </td>
@@ -842,7 +901,7 @@ export default function ImportExport() {
           </div>
         </Card>
 
-        {/* Sección de Ayuda */}
+        {/* Sección de Ayuda Actualizada */}
         <Card className="border-0 shadow-lg">
           <div className="p-6 text-white rounded-t-lg bg-gradient-to-r from-purple-600 to-purple-700">
             <div className="flex items-center space-x-3">
@@ -850,8 +909,7 @@ export default function ImportExport() {
               <div>
                 <h3 className="text-xl font-bold">Información Importante</h3>
                 <p className="text-sm text-purple-100">
-                  Consideraciones y mejores prácticas para importación y
-                  exportación
+                  Formatos soportados y mejores prácticas
                 </p>
               </div>
             </div>
@@ -859,19 +917,20 @@ export default function ImportExport() {
 
           <div className="p-6 bg-white">
             <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
-              <div className="p-4 border border-blue-200 rounded-lg bg-blue-50">
+              <div className="p-4 border border-green-200 rounded-lg bg-green-50">
                 <div className="flex items-start space-x-3">
-                  <div className="p-2 bg-blue-100 rounded-lg">
-                    <Upload className="w-5 h-5 text-blue-600" />
+                  <div className="p-2 bg-green-100 rounded-lg">
+                    <Upload className="w-5 h-5 text-green-600" />
                   </div>
                   <div>
-                    <h4 className="mb-2 font-semibold text-blue-900">
-                      Importación de Datos
+                    <h4 className="mb-2 font-semibold text-green-900">
+                      Importación - Solo Excel
                     </h4>
-                    <ul className="space-y-1 text-sm text-blue-700">
+                    <ul className="space-y-1 text-sm text-green-700">
+                      <li>• Solo archivos .xlsx permitidos</li>
                       <li>• Usar siempre las plantillas oficiales</li>
-                      <li>• Verificar formato y codificación de archivos</li>
-                      <li>• Validar datos antes de la importación</li>
+                      <li>• Verificar formato de columnas</li>
+                      <li>• Máximo 10,000 registros por archivo</li>
                       <li>• Realizar copias de seguridad previas</li>
                     </ul>
                   </div>
@@ -885,13 +944,14 @@ export default function ImportExport() {
                   </div>
                   <div>
                     <h4 className="mb-2 font-semibold text-orange-900">
-                      Exportación de Datos
+                      Exportación - Multi-formato
                     </h4>
                     <ul className="space-y-1 text-sm text-orange-700">
-                      <li>• Seleccionar el formato apropiado</li>
+                      <li>• Excel (.xlsx) - Para análisis de datos</li>
+                      <li>• PDF - Para reportes oficiales</li>
+                      <li>• TXT - Para sistemas externos</li>
                       <li>• Configurar filtros según necesidad</li>
                       <li>• Considerar el tamaño del archivo</li>
-                      <li>• Mantener confidencialidad de datos</li>
                     </ul>
                   </div>
                 </div>
@@ -904,13 +964,14 @@ export default function ImportExport() {
                   </div>
                   <div>
                     <h4 className="mb-2 font-semibold text-purple-900">
-                      Consideraciones Legales
+                      Consideraciones Técnicas
                     </h4>
                     <ul className="space-y-1 text-sm text-purple-700">
+                      <li>• Importar solo en horarios de baja actividad</li>
+                      <li>• Validar datos antes de procesar</li>
+                      <li>• Mantener historial de operaciones</li>
+                      <li>• Verificar permisos de usuario</li>
                       <li>• Cumplir normativa de protección de datos</li>
-                      <li>• Registrar todas las operaciones</li>
-                      <li>• Autorización previa para exportaciones</li>
-                      <li>• Auditoría de cambios realizados</li>
                     </ul>
                   </div>
                 </div>
